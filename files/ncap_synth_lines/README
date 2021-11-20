@@ -1,0 +1,74 @@
+
+About the synthesis and linelists:
+
+This directory contains subdirectories with MOOG 'synth' driver parameter 
+files and the linelists they rely on.  You will need to copy your model 
+atmosphere file into the current directory (and rename it 'model') and copy 
+your ascii (wavelength, flux) spectrum into the current directory (and rename 
+it 'spect').  From there, it should be just plug-and-play within the
+'synth_heavy' directory.
+
+I created these files for my analysis of HD 222925, which has many, many 
+features in its spectrum, so its likely to cover most of the lines we would 
+need as part of the RPA analysis.
+
+The parameter files are segmented into 10-Angstrom chunks.  Not all pieces
+of the spectrum have a parameter file at this time, because there was no need
+to create them for the analysis of HD 222925.  There should be complete 
+coverage from 3330-4600 Angstroms or so, though, so only the redder parts
+of the spectrum may have spotty coverage.  
+
+Each parameter file contains variable abundances for the relevant n-capture 
+species.  Occasionally a blending feature may be enhanced across the board.
+If you alter the 'NATOMS' section of the model atmosphere (last few lines; 
+see example) so that the model abundance defaults to something close to the 
+mean abundance for each species, you will rarely need to change the abundance 
+offsets in the parameter files.  
+
+If I didn't examine a particular species in a particular wavelength chunk in 
+HD 222925, I didn't alter it in the paramter files, but you can of course 
+update as needed.  Some species whose abundances are varied in a particular 
+synthesis may have lines that blend (e.g., Ce II and Nd II and Sm II overlap 
+quite often).  Use common sense about how to approach these.  It's part of the 
+reason we don't just automate and produce abundances with the touch of a 
+button.
+
+The parameter files also default to scattering turned on and other standard 
+settings.  The 12C/13C ratios all default here to 5, so this may need to be 
+adjusted for less evolved stars.  The isotope ratios for n-capture elements all
+default to the r-process ratios from Sneden, Cowan, & Gallino (2008, ARAA),
+so you'll need to adjust these if you're analyzing a star with substantial
+s-process contributions.  Parameters like the smoothing may also need to be
+adjusted.
+
+I created the linelists with my own version of Chris Sneden's 'linemake' code.
+My version mainly differs from Chris' in that I sometimes add sets of NIST
+loggf values for lighter species (e.g., Na I).  I *think* the outputs should
+be the same for the n-capture elements, but, as always, check a particular 
+line if it is critical.  
+
+A warning about my linelists: a bug in my lists caused two versions of Co I
+line components to be inserted by 'linemake.'  This has been fixed going
+forward, but it was not possible to manually edit all of the linelists that
+I had already made and in some cases tuned individually.  So, know that most
+Co I lines will have too many components, so they will yield abundances that
+are low by a factor of approximately 2.  (Why approximately 2?  Because the
+total loggf values differ by a few hundredths of a dex between the Kurucz and
+Lawler patterns; if they were identical, then the abundances would be low
+by exactly 2.  Otherwise, the line component patterns appear to be effectively
+identical with only small (< 0.002 A) wavelength zeropoint shifts.)  If you
+need to derive an abundance from a Co I line, or if it blends your feature
+of interest, and both Lawler and Kurucz provided HFS components, go into the 
+line list and delete the Kurucz components by hand.
+
+I have manually adjusted the loggf values for some blending features in the
+linelists, marked with 'adj' in columns 71-80 and the original loggf value.
+I have tried to use these last 10 columns to provide other useful information
+about the provenance of the loggf values and/or HFS/IS.  See Chris' notes
+in the 'linemake' documentation for full references.  Many of these are also
+given in Table 2 of the RPA paper on HD 222925.
+
+I'm donating these to the RPA for our analysis.  Feel free to use, or not.
+
+IUR, July 2018
+
